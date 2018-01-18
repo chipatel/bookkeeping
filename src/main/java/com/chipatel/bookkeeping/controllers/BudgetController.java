@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/")
+@RequestMapping(value = "/budget")
 public class BudgetController {
 
   Logger logger = Logger.getLogger(this.getClass());
@@ -24,7 +24,7 @@ public class BudgetController {
   private BudgetDao _budgetDao;
 
   @ResponseBody
-  @RequestMapping(value = "add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity addBudget(@RequestBody Budget budget) {
     try {
       _budgetDao.addBudget(budget);
@@ -35,7 +35,7 @@ public class BudgetController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "get", method = RequestMethod.GET)
+  @RequestMapping(value = "/get", method = RequestMethod.GET)
   public List<Budget> getAllBudget() {
     List<Budget> allBudget = null;
     try {

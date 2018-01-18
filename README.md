@@ -1,1 +1,1 @@
-# bookkeeping-springhiber-hibernate
+# bookkeeping-spring-hibernate application

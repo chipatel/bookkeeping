@@ -35,8 +35,14 @@ public class BudgetDao {
     return getSession().createQuery("from Budget").list();
   }
 
-  public void addBudget(Budget budget){
+  public void addBudget(Budget budget) {
     entityManager.persist(budget);
+  }
+
+  public void addBudget(List<Budget> budgets) {
+    for (Budget budget : budgets) {
+      entityManager.persist(budget);
+    }
   }
 
   public List<Budget> getBudget(int year) {

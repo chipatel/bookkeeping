@@ -35,6 +35,17 @@ public class BudgetController {
   }
 
   @ResponseBody
+  @RequestMapping(value = "/multisave", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity addBudget(@RequestBody List<Budget> budget) {
+    try {
+      _budgetDao.addBudget(budget);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    return new ResponseEntity<>(budget, HttpStatus.OK);
+  }
+
+  @ResponseBody
   @RequestMapping(value = "/get", method = RequestMethod.GET)
   public List<Budget> getAllBudget() {
     List<Budget> allBudget = null;

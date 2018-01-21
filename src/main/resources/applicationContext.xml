@@ -20,7 +20,7 @@
     <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
   </bean>
 
-  <!--<<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+  <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
     <property name="url" value="jdbc:postgresql://localhost:5432/test"/>
     <property
       name="username" value="postgres"/>
@@ -37,7 +37,8 @@
     </property>
     <property name="hibernateProperties">
       <props>
-        <prop key="spring.jpa.hibernate.naming-strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+        <prop key="spring.jpa.hibernate.naming-strategy">org.hibernate.cfg.ImprovedNamingStrategy
+        </prop>
         <prop key="hibernate.show_sql">true</prop>
         <prop key="hibernate.format_sql">true</prop>
         <prop key="hibernate.generate_statistics">true</prop>

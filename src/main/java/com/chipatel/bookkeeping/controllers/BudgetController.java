@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -46,7 +47,7 @@ public class BudgetController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/get", method = RequestMethod.GET)
+  @RequestMapping(value = "/all", method = RequestMethod.GET)
   public List<Budget> getAllBudget() {
     List<Budget> allBudget = null;
     try {
@@ -57,42 +58,27 @@ public class BudgetController {
     }
     return allBudget;
   }
-/*
-  @ResponseBody
-  @RequestMapping(value = "/name={incomename}", method = RequestMethod.GET)
-  public Income getIncomeByName(@PathVariable String incomename) {
-    Income income = null;
-    try {
-      income = _incomeDao.getIncomeName(incomename);
-    } catch (Exception ex) {
-      logger.error(ex);
-    }
-    return income;
-  }
 
-  @ResponseBody
-  @RequestMapping(value = "/month={month}&year={year}", method = RequestMethod.GET)
-  public List<Income> getAllIncomeByMonthYear(@PathVariable int month, @PathVariable int year) {
-    List<Income> incomelist = null;
-    try {
-      incomelist = _incomeDao.getIncomeByMonthYear(month, year);
-    } catch (Exception ex) {
-      logger.error(ex.fillInStackTrace());
+  /*
+    @ResponseBody
+    @RequestMapping(value = "/get", params = {"month"}, method = RequestMethod.GET)
+    public List<Budget> getBudgetMonth(@RequestParam(value = "month") int month, ModelMap map) {
+      map.
+      return this._budgetDao.getBudgetMonth(month);
     }
-    return incomelist;
-  }
 
-
-  @ResponseBody
-  @RequestMapping(value = "/delete/{name}", method = RequestMethod.PUT)
-  public String delete(int id, String name) {
-    try {
-      // _incomeDao.delete(new Income());
-    } catch (Exception ex) {
-      return ex.getMessage();
+    @ResponseBody
+    @RequestMapping(value = "/get", params = {"year"}, method = RequestMethod.GET)
+    public List<Budget> getBudgetYear(@RequestParam(value = "year") int year) {
+      return this._budgetDao.getBudgetYear(year);
     }
-    return "Income succesfully deleted!";
-  }
   */
+
+  @ResponseBody
+  @RequestMapping(value = "/get", params = {"month", "year"}, method = RequestMethod.GET)
+  public List<Budget> getBudgetMonthYear(@RequestParam(value = "month") int month,
+      @RequestParam(value = "year") int year) {
+    return this._budgetDao.getBudget(month, year);
+  }
 
 }

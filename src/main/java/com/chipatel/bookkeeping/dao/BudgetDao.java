@@ -1,11 +1,15 @@
 package com.chipatel.bookkeeping.dao;
 
 import com.chipatel.bookkeeping.models.BarChart;
+import com.chipatel.bookkeeping.models.BarChartData;
 import com.chipatel.bookkeeping.models.Budget;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -71,22 +75,31 @@ public class BudgetDao {
     return query.list();
   }
 
-  public List<BarChart> getTypeSumData(int year) {
+  public BarChart getTypeSumData(int year) {
     List<Object[]> result = this.entityManager.createNativeQuery(
         "select UPPER(budget_type) as budget_type, SUM(budget_amount) budget_amount, budget_month, budget_year from budget\n"
-            + " WHERE budget_year = :year group by budget_type, budget_month, budget_year ORDER BY budget_month, budget_year").setParameter("year", year)
+            + " WHERE budget_year = :year group by budget_type, budget_month, budget_year ORDER BY budget_month, budget_year")
+        .setParameter("year", year)
         .getResultList();
 
-    Map<String, BarChart> test = new HashMap<>();
-    test.put("INCOME", new BarChart("INCOME"));
-    test.put("EXPENSE", new BarChart("EXPENSE"));
+    Map<String, BarChartData> test = new HashMap<>();
+    test.put("INCOME", new BarChartData("INCOME"));
+    test.put("EXPENSE", new BarChartData("EXPENSE"));
+
+    List<String> axisLabel = new ArrayList<>();
 
     result.stream().forEach((record) -> {
-      BarChart tmp = test.get( record[0]);
-      tmp.getData().add((Double) record[1]);
-      tmp.getAxisTitle().add(record[2] + "-" + record[3]);
+
+      BarChartData tmp = test.get(record[0]);
+
+      tmp.getData().add((Double)record[1]);
+      if (!axisLabel.contains(record[2] + "-" + record[3])) {
+        axisLabel.add(record[2] + "-" + record[3]);
+      }
+
       test.put(tmp.getLabel(), tmp);
     });
-    return new ArrayList<>(test.values());
+
+    return new BarChart(new ArrayList<>(test.values()), axisLabel);
   }
 }

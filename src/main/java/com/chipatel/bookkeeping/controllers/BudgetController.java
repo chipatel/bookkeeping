@@ -85,7 +85,7 @@ public class BudgetController {
 
   @ResponseBody
   @RequestMapping(value = "/overall", params = {"year"}, method = RequestMethod.GET)
-  public List<BarChart> getBudgetMonthYear(@RequestParam(value = "year") int year) {
+  public BarChart getBudgetMonthYear(@RequestParam(value = "year") int year) {
     return this._budgetDao.getTypeSumData(year);
   }
 

@@ -1,5 +1,6 @@
 package com.chipatel.bookkeeping.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,6 +11,12 @@ public class BarChart {
   private List<Double> data;
   private String label;
   private List<String> axisTitle;
+
+  public BarChart(String label){
+    this.data = new ArrayList<>();
+    this.axisTitle = new ArrayList<>();
+    this.label = label;
+  }
 
   public List<Double> getData() {
     return data;

@@ -2,7 +2,10 @@ package com.chipatel.bookkeeping.dao;
 
 import com.chipatel.bookkeeping.models.BarChart;
 import com.chipatel.bookkeeping.models.Budget;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -56,7 +59,8 @@ public class BudgetDao {
   }
 
   public List<Budget> getBudgetYear(int year) {
-    query = getSession().createQuery("from Budget where budgetYear = :year").setParameter("year", year);
+    query = getSession().createQuery("from Budget where budgetYear = :year")
+        .setParameter("year", year);
     return query.list();
   }
 
@@ -67,9 +71,22 @@ public class BudgetDao {
     return query.list();
   }
 
-  public List<Budget> getBudget(String type) {
-    return getSession().createQuery("from Budget where budgetType = :type").setParameter("type", type)
-        .list();
-  }
+  public List<BarChart> getTypeSumData(int year) {
+    List<Object[]> result = this.entityManager.createNativeQuery(
+        "select UPPER(budget_type) as budget_type, SUM(budget_amount) budget_amount, budget_month, budget_year from budget\n"
+            + " WHERE budget_year = :year group by budget_type, budget_month, budget_year ORDER BY budget_month, budget_year").setParameter("year", year)
+        .getResultList();
 
+    Map<String, BarChart> test = new HashMap<>();
+    test.put("INCOME", new BarChart("INCOME"));
+    test.put("EXPENSE", new BarChart("EXPENSE"));
+
+    result.stream().forEach((record) -> {
+      BarChart tmp = test.get( record[0]);
+      tmp.getData().add((Double) record[1]);
+      tmp.getAxisTitle().add(record[2] + "-" + record[3]);
+      test.put(tmp.getLabel(), tmp);
+    });
+    return new ArrayList<>(test.values());
+  }
 }

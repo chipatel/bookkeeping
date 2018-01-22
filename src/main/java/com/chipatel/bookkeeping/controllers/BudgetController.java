@@ -1,9 +1,11 @@
 package com.chipatel.bookkeeping.controllers;
 
 import com.chipatel.bookkeeping.dao.BudgetDao;
+import com.chipatel.bookkeeping.models.BarChart;
 import com.chipatel.bookkeeping.models.Budget;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.websocket.WsRemoteEndpointAsync;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -79,6 +81,12 @@ public class BudgetController {
   public List<Budget> getBudgetMonthYear(@RequestParam(value = "month") int month,
       @RequestParam(value = "year") int year) {
     return this._budgetDao.getBudget(month, year);
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/overall", params = {"year"}, method = RequestMethod.GET)
+  public List<BarChart> getBudgetMonthYear(@RequestParam(value = "year") int year) {
+    return this._budgetDao.getTypeSumData(year);
   }
 
 }
